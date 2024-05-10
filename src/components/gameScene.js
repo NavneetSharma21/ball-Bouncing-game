@@ -51,13 +51,23 @@ const GameScene = ({ socket }) => {
       ballRef.current = ball;
       this.physics.world.setBoundsCollision(true, true, true, true);
       this.physics.add.collider(ball, this.physics.world.bounds);
+
+      socket.emit('initial-ball', { x: ball.x, y: ball.y });
     }
 
     return () => {
       game.destroy(true);
     };
 
-  }, []);
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on('initial-position', ({ x, y }) => {
+      if (ballRef.current) {
+        ballRef.current.setPosition(x, y);
+      }
+    });
+  }, [socket]);
 
   useEffect(() => {
     socket.on('move-ball', (wallPosition) => {

@@ -33,6 +33,10 @@ io.on('connection', (socket)=>{
       console.log("user")// Emit regular user status to subsequent connected sockets
     }
 
+    socket.on('initial-ball', ({x,y})=>{
+      io.emit("initial-position", ({x,y}))
+    })
+
     socket.on('admin-move-ball', (wallIndex)=>{
           io.emit('move-ball', wallIndex);
     })
